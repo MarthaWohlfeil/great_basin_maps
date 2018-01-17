@@ -1,0 +1,46 @@
+---
+title: "maps1"
+author: "Martha Wohlfeil"
+date: "January 16, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Creating a Map of the Great Basin with interactive layers 
+
+```{r}
+library(sf)
+library(raster)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+install.packages("maps")
+
+
+leaflet() %>% 
+  addTiles() %>%
+  setView(-117.035, 39.483, zoom = 8) %>% 
+  addProviderTiles(providers$OpenTopoMap, group = "Topo View") %>% 
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satelite View") %>%
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical View")
+  addPolygons(data = mapStates) %>% 
+  
+  addLayersControl(
+    baseGroups = c("Topo View", "Satelite View"),
+    options = layersControlOptions(collapsed = T))
+
+library(maps)
+mapStates = map("state", fill = FALSE, plot = FALSE)
+leaflet(data = mapStates) %>% addTiles() %>%
+  addPolygons(fillColor = topo.colors(10, alpha = NULL), stroke = FALSE)
+
+
+library(rgdal)
+states <- readOGR("shapes/cb_2016_us_state_20m.shp",
+  layer = "cb_2016_us_state_20m", GDAL1_integer64_policy = TRUE)
+```
+
