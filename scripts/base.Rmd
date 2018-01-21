@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = normalizePath("../"))
 ```
 
 ##Creating a Map of the Great Basin with interactive layers 
@@ -20,18 +21,25 @@ library(ggplot2)
 library(plotly)
 install.packages("maps")
 
+#MAP
 
 leaflet() %>% 
   addTiles() %>%
-  setView(-117.035, 39.483, zoom = 8) %>% 
+  setView(-117.035, 39.483, zoom = 6) %>% 
   addProviderTiles(providers$OpenTopoMap, group = "Topo View") %>% 
   addProviderTiles(providers$Esri.WorldImagery, group = "Satelite View") %>%
-  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical View")
-  addPolygons(data = mapStates) %>% 
+  addProviderTiles(providers$Esri.WorldPhysical, group = "Physical View") %>% 
+  addPolygons(data = gb3) %>% 
+  addPolygons(data = states2) %>% 
   
   addLayersControl(
     baseGroups = c("Topo View", "Satelite View"),
     options = layersControlOptions(collapsed = T))
+  
+  
+  
+  
+  
 
 library(maps)
 mapStates = map("state", fill = FALSE, plot = FALSE)
@@ -40,7 +48,29 @@ leaflet(data = mapStates) %>% addTiles() %>%
 
 
 library(rgdal)
-states <- readOGR("shapes/cb_2016_us_state_20m.shp",
-  layer = "cb_2016_us_state_20m", GDAL1_integer64_policy = TRUE)
+states <- readOGR(dsn = "shapes/cb_2016_us_state_20m.shp",
+  layer = "cb_2016_us_state_20m", GDAL1_integer64_policy = FALSE)
+
+#great basin hydrogreographic outline:
+
+gb <- st_read(dsn = "shapes/ha694c_ha1000gb_shapefile", layer = "ha1000gb_l")
+
+gb2 <- st_transform(gb, 4326)
+
+gb3 <- st_combine(gb2)
+
+gb4 <- st_union(gb3, by_feature = TRUE)
+
+class(gb4)
+
+plot(gb4)
+
+library(sf)
+
+
+
+states <- sf::st_read("shapes/cb_2016_us_state_20m.shp")
+
+states2 <- st_transform(states, 4326)
 ```
 
