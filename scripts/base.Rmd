@@ -1,8 +1,10 @@
 ---
-title: "maps1"
+title: "Map of the Great Basin"
 author: "Martha Wohlfeil"
 date: "January 16, 2018"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -12,65 +14,67 @@ knitr::opts_knit$set(root.dir = normalizePath("../"))
 
 ##Creating a Map of the Great Basin with interactive layers 
 
-```{r}
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+
 library(sf)
 library(raster)
 library(leaflet)
 library(dplyr)
 library(ggplot2)
 library(plotly)
-install.packages("maps")
+#install.packages("maps")
+
+
+
+#outline of states 
+states <- sf::st_read("shapes/cb_2016_us_state_20m.shp")
+
+states2 <- st_transform(states, 4326)
+
+
+
+#new GB shapefile
+
+greatbasin <- sf::st_read("shapes/data/commondata/new_gblcc_boundary/GreatBasin_LCC.shp")
+
+greatbasin2 <- st_transform(greatbasin, 4326)
+
+plot(greatbasin2)
+```
+
+##The Map
+
+```{r}
 
 #MAP
 
-leaflet() %>% 
+leaflet(width = "100%") %>% 
   addTiles() %>%
   setView(-117.035, 39.483, zoom = 6) %>% 
   addProviderTiles(providers$OpenTopoMap, group = "Topo View") %>% 
   addProviderTiles(providers$Esri.WorldImagery, group = "Satelite View") %>%
   addProviderTiles(providers$Esri.WorldPhysical, group = "Physical View") %>% 
-  addPolygons(data = gb3) %>% 
-  addPolygons(data = states2) %>% 
+  
+  #add state lines and GB outline
+  
+  addPolygons(data = greatbasin2, color = "blue", weight = 3, fillColor = "transparent") %>% 
+  addPolygons(data = states2, color = "black", weight = 1.5, fillColor = "transparent") %>% 
+  
+  
+  #add layers toggle
   
   addLayersControl(
-    baseGroups = c("Topo View", "Satelite View"),
-    options = layersControlOptions(collapsed = T))
+    baseGroups = c("Topo View", "Satelite View", "Physical View"),
+    options = layersControlOptions(collapsed = T)) %>% 
   
+  #add easy zoom button
   
-  
-  
-  
-
-library(maps)
-mapStates = map("state", fill = FALSE, plot = FALSE)
-leaflet(data = mapStates) %>% addTiles() %>%
-  addPolygons(fillColor = topo.colors(10, alpha = NULL), stroke = FALSE)
-
-
-library(rgdal)
-states <- readOGR(dsn = "shapes/cb_2016_us_state_20m.shp",
-  layer = "cb_2016_us_state_20m", GDAL1_integer64_policy = FALSE)
-
-#great basin hydrogreographic outline:
-
-gb <- st_read(dsn = "shapes/ha694c_ha1000gb_shapefile", layer = "ha1000gb_l")
-
-gb2 <- st_transform(gb, 4326)
-
-gb3 <- st_combine(gb2)
-
-gb4 <- st_union(gb3, by_feature = TRUE)
-
-class(gb4)
-
-plot(gb4)
-
-library(sf)
+   addEasyButton(easyButton(
+    icon="fa-globe", title="Zoom to Level 6",
+    onClick=JS("function(btn, map){ map.setZoom(6); }")))
 
 
 
-states <- sf::st_read("shapes/cb_2016_us_state_20m.shp")
 
-states2 <- st_transform(states, 4326)
 ```
 

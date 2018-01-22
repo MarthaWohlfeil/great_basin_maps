@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ESRI_ItemInformation Culture='en-US'>
+<name>ea7fe35c32e447868c65b8688855b65b</name>
+<guid>F57C25E0-BA46-4350-9473-7E1CD958867B</guid>
+<catalogpath></catalogpath>
+<snippet></snippet>
+<description>Outline of the administrative region of the Great Basin Landscape Conservation Cooperative (note this is a fuzzy boundary).
+
+This dataset was uploaded to Data Basin and is available with additional information at: /datasets/ea7fe35c32e447868c65b8688855b65b</description>
+<summary></summary>
+<title>ea7fe35c32e447868c65b8688855b65b</title>
+<tags></tags>
+<type>Layer Package</type>
+<typekeywords>
+<typekeyword>Shapefile Feature Class</typekeyword>
+<typekeyword>Layer Package</typekeyword>
+<typekeyword>Data</typekeyword>
+<typekeyword>ArcMap</typekeyword>
+<typekeyword>ArcGlobe</typekeyword>
+<typekeyword>ArcGIS Explorer</typekeyword>
+<typekeyword>lpk</typekeyword>
+</typekeywords>
+<thumbnail>thumbnail/thumbnail.png</thumbnail>
+<documentation></documentation>
+<url></url>
+<datalastmodifiedtime></datalastmodifiedtime>
+<extent>
+<xmin>-122.803354783885</xmin>
+<ymin>36.286256234388</ymin>
+<xmax>-110.800956895873</xmax>
+<ymax>45.3630495539418</ymax>
+</extent>
+<spatialreference>NAD_1983_UTM_Zone_11N</spatialreference>
+<accessinformation>Maxwell Taylor</accessinformation>
+<licenseinfo></licenseinfo>
+</ESRI_ItemInformation>
